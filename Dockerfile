@@ -1,4 +1,4 @@
-#Author RAGHAVAN
+#Author VSRV Raghavan
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 #ARG WAR_FILE
