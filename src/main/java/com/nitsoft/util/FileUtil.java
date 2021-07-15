@@ -93,7 +93,7 @@ public class FileUtil {
             ic.close();
             oc.close();
         }catch(Exception e) {
-            System.out.println("Exception in copyFile ");
+            
         }
     }
 
