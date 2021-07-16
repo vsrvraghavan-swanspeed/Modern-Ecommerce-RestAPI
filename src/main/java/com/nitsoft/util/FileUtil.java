@@ -91,7 +91,7 @@ public class FileUtil {
 
             try(FileChannel ic = new FileInputStream(in).getChannel(); FileChannel oc = new FileOutputStream(out).getChannel()){
                 oc.transferFrom(ic, 0, ic.size());              
-            }catch(Exception e){
+            }catch(Exception ex){
                 EventLogManager.getInstance().info("copyFile IO Error : " + ex.getMessage());
             }
     }
