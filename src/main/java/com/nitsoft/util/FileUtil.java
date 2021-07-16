@@ -5,7 +5,7 @@ import com.nitsoft.ecommerce.tracelogged.EventLogManager;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.File.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -47,11 +47,8 @@ public class FileUtil {
      * @param filePath 
      */
     public static void deleteFile(String filePath) throws IOException{
-        File file = new File(filePath);
-        if (file.exists()) {
-            if(!file.delete()){
-                EventLogManager.getInstance().info("deleteFile Failed : ");
-            }
+        if(!Files.deleteIfExists(filePath)){
+            EventLogManager.getInstance().info("deleteFile Failed : ");
         }
     }
 
