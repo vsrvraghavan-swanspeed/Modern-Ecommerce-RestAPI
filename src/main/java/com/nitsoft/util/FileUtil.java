@@ -22,8 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.DirectoryNotEmptyException;
 
 /**
  */
@@ -51,7 +49,9 @@ public class FileUtil {
     public static void deleteFile(String filePath) throws IOException{
         File file = new File(filePath);
         if (file.exists()) {
-            file.delete();
+            if(!file.delete()){
+                EventLogManager.getInstance().info("deleteFile Failed : " + e.getMessage());
+            }
         }
     }
 
@@ -64,7 +64,9 @@ public class FileUtil {
                 deleteFile(files[i].getPath());
             }
             // 
-            dir.delete();
+            if(!dir.delete()){
+                EventLogManager.getInstance().info("deleteDirectory2 Failed : " + e.getMessage());
+            }
         }
     }
 
@@ -82,7 +84,9 @@ public class FileUtil {
                     }
                 }
                 // 
-                dir.delete();
+                if(!dir.delete()){
+                    EventLogManager.getInstance().info("deleteDirectory Failed : " + e.getMessage());
+                }
             }
         }
     }
