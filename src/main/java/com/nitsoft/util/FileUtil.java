@@ -86,16 +86,14 @@ public class FileUtil {
     }
 
     public static void copyFile(String in, String out) throws Exception {
-        try (FileChannel ic = new FileInputStream(in).getChannel(); FileChannel oc = new FileOutputStream(out).getChannel();) {
+
+            FileChannel ic = new FileInputStream(in).getChannel();   
+            FileChannel oc = new FileOutputStream(out).getChannel();
             ic = new FileInputStream(in).getChannel();
             oc = new FileOutputStream(out).getChannel();
-            oc.transferFrom(ic, 0, ic.size());            
-        }catch(Exception e) {
-            throw new IOException("error message");
-        }finally{
+            oc.transferFrom(ic, 0, ic.size());                    
             ic.close();
             oc.close();
-        }
     }
 
     public static void copyFolder(String in, String out) throws Exception {
