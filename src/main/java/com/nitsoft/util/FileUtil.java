@@ -22,6 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.DirectoryNotEmptyException;
 
 /**
  */
