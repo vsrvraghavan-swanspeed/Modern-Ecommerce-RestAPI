@@ -91,13 +91,10 @@ public class FileUtil {
                 try(FileChannel oc = new FileOutputStream(out).getChannel()){
                     oc.transferFrom(ic, 0, ic.size());
                 }catch(Exception e){
-                    oc.close();
-                }                    
+                    throw new IOException("IO Error");
+                }                
             }catch(Exception e){
-                ic.close();
-            }finally{
-                ic.close();
-                oc.close();
+                throw new IOException("IO Error");
             }
             //FileChannel ic = new FileInputStream(in).getChannel();   
             //FileChannel oc = new FileOutputStream(out).getChannel();           
