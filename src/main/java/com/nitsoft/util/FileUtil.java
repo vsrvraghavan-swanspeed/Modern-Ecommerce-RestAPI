@@ -90,7 +90,7 @@ public class FileUtil {
             try(FileChannel ic = new FileInputStream(in).getChannel()){
                 try(FileChannel oc = new FileOutputStream(out).getChannel()){
                     oc.transferFrom(ic, 0, ic.size());
-                }catch(Eception e){
+                }catch(Exception e){
                     oc.close();
                 }                    
             }catch(Exception e){
