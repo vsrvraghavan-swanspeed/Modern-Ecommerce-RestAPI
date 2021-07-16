@@ -87,20 +87,11 @@ public class FileUtil {
 
     public static void copyFile(String in, String out) throws Exception {
 
-            try(FileChannel ic = new FileInputStream(in).getChannel()){
-                try(FileChannel oc = new FileOutputStream(out).getChannel()){
-                    oc.transferFrom(ic, 0, ic.size());
-                }catch(Exception e){
-                    throw new IOException("IO Error");
-                }                
+            try(FileChannel ic = new FileInputStream(in).getChannel(); FileChannel oc = new FileOutputStream(out).getChannel()){
+                oc.transferFrom(ic, 0, ic.size());              
             }catch(Exception e){
                 throw new IOException("IO Error");
             }
-            //FileChannel ic = new FileInputStream(in).getChannel();   
-            //FileChannel oc = new FileOutputStream(out).getChannel();           
-            //oc.transferFrom(ic, 0, ic.size());                    
-            //ic.close();
-            //oc.close();
     }
 
     public static void copyFolder(String in, String out) throws Exception {
