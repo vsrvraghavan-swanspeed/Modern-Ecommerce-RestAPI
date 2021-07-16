@@ -46,14 +46,14 @@ public class FileUtil {
      * Delete file
      * @param filePath 
      */
-    public static void deleteFile(String filePath) {
+    public static void deleteFile(String filePath) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
         File file = new File(filePath);
         if (file.exists()) {
             file.delete();
         }
     }
 
-    public static void deleteDirectory2(String path) {
+    public static void deleteDirectory2(String path) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
         File dir = new File(path);
         if (dir.exists()) {
             //
@@ -66,7 +66,7 @@ public class FileUtil {
         }
     }
 
-    public static void deleteDirectory(String path) {
+    public static void deleteDirectory(String path) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
         if (path != null) {
             File dir = new File(path);
             if (dir.exists()) {
@@ -90,7 +90,7 @@ public class FileUtil {
             try(FileChannel ic = new FileInputStream(in).getChannel(); FileChannel oc = new FileOutputStream(out).getChannel()){
                 oc.transferFrom(ic, 0, ic.size());              
             }catch(Exception e){
-                throw new IOException("IO Error");
+                EventLogManager.getInstance().info("copyFile IO Error : " + ex.getMessage());
             }
     }
 
