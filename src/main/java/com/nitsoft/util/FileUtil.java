@@ -50,7 +50,7 @@ public class FileUtil {
         File file = new File(filePath);
         if (file.exists()) {
             if(!file.delete()){
-                EventLogManager.getInstance().info("deleteFile Failed : " + e.getMessage());
+                EventLogManager.getInstance().info("deleteFile Failed : ");
             }
         }
     }
@@ -65,7 +65,7 @@ public class FileUtil {
             }
             // 
             if(!dir.delete()){
-                EventLogManager.getInstance().info("deleteDirectory2 Failed : " + e.getMessage());
+                EventLogManager.getInstance().info("deleteDirectory2 Failed : ");
             }
         }
     }
@@ -83,9 +83,8 @@ public class FileUtil {
                         deleteDirectory(files[i].getPath());
                     }
                 }
-                // 
                 if(!dir.delete()){
-                    EventLogManager.getInstance().info("deleteDirectory Failed : " + e.getMessage());
+                    EventLogManager.getInstance().info("deleteDirectory Failed : ");
                 }
             }
         }
