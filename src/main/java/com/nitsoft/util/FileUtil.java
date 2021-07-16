@@ -6,7 +6,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.File.*;
+import java.nio.file.Files
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
