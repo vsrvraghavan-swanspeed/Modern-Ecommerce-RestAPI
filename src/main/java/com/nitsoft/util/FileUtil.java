@@ -238,37 +238,38 @@ public class FileUtil {
         EventLogManager.getInstance().info("downloadFromLocalServer path=" + RealPath);
         try {
             java.io.File initialFile = new java.io.File(RealPath);
-            InputStream inputStream = new FileInputStream(initialFile);
-        // Do Download
-        
-            if (inputStream != null) {
-                int contentLength = inputStream.available();
-                response.setContentLength(contentLength);
-                response.addHeader("Content-Length", Long.toString(contentLength));
-                //read from the file; write to the ServletOutputStream
-                String ext = FilenameUtils.getExtension(RealPath);
-                
-                response.setContentType(MimeTypeUtils.getMineType(ext)); // Fixing bug: Lack extention on IE9
-                response.setHeader("Content-Type", MimeTypeUtils.getMineType(ext));
-                
-//                String baseName = (ext.equals(fileType)) ? FilenameUtils.getBaseName(fileName) : fileName;
+            
+            try(InputStream inputStream = new FileInputStream(initialFile)){                
+                if (inputStream != null) {
+                    int contentLength = inputStream.available();
+                    response.setContentLength(contentLength);
+                    response.addHeader("Content-Length", Long.toString(contentLength));
+                    //read from the file; write to the ServletOutputStream
+                    String ext = FilenameUtils.getExtension(RealPath);
 
-                response.setHeader("Content-Disposition", "attachment; filename=\"receipt_" + createDate.toString() + "." + ext + "\""); // Fix bug: Lack file name on Firefox
-                ServletOutputStream out = response.getOutputStream();
-                byte[] buffer = new byte[1024];
-                try {
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) >= 0) {
-                        out.write(buffer, 0, bytesRead);
+                    response.setContentType(MimeTypeUtils.getMineType(ext)); // Fixing bug: Lack extention on IE9
+                    response.setHeader("Content-Type", MimeTypeUtils.getMineType(ext));
+
+    //                String baseName = (ext.equals(fileType)) ? FilenameUtils.getBaseName(fileName) : fileName;
+
+                    response.setHeader("Content-Disposition", "attachment; filename=\"receipt_" + createDate.toString() + "." + ext + "\""); // Fix bug: Lack file name on Firefox
+                    ServletOutputStream out = response.getOutputStream();
+                    byte[] buffer = new byte[1024];
+                    try {
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) >= 0) {
+                            out.write(buffer, 0, bytesRead);
+                        }
+                    } catch (Exception e) {
+                        EventLogManager.getInstance().info("doDownload file error" + e.getMessage());
                     }
-                } catch (Exception e) {
-                    System.err.println(e);
-                }
+                }                                                
+            }catch(Exception ex){
+                EventLogManager.getInstance().info("doDownload file error" + ex.getMessage());
             }
+        // Do Download                    
         } catch (Exception ex) {
             EventLogManager.getInstance().info("doDownload file error" + ex.getMessage());
-        }finally{
-            inputStream.close();
         }
     }
     
