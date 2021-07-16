@@ -48,14 +48,14 @@ public class FileUtil {
      * Delete file
      * @param filePath 
      */
-    public static void deleteFile(String filePath) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
+    public static void deleteFile(String filePath) throws IOException{
         File file = new File(filePath);
         if (file.exists()) {
             file.delete();
         }
     }
 
-    public static void deleteDirectory2(String path) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
+    public static void deleteDirectory2(String path) throws IOException{
         File dir = new File(path);
         if (dir.exists()) {
             //
@@ -68,7 +68,7 @@ public class FileUtil {
         }
     }
 
-    public static void deleteDirectory(String path) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
+    public static void deleteDirectory(String path) throws IOException{
         if (path != null) {
             File dir = new File(path);
             if (dir.exists()) {
