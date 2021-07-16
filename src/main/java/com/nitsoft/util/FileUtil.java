@@ -236,9 +236,7 @@ public class FileUtil {
      */
     public static void downloadTeamRecieptFromServer(HttpServletResponse response, String RealPath, Date createDate) {
         EventLogManager.getInstance().info("downloadFromLocalServer path=" + RealPath);
-        try {
-        java.io.File initialFile = new java.io.File(RealPath);
-        InputStream inputStream = new FileInputStream(initialFile);
+        try (java.io.File initialFile = new java.io.File(RealPath); InputStream inputStream = new FileInputStream(initialFile);) {
         // Do Download
         
             if (inputStream != null) {
@@ -263,10 +261,6 @@ public class FileUtil {
                     }
                 } catch (Exception e) {
                     System.err.println(e);
-                } finally {
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
                 }
             }
         } catch (Exception ex) {
