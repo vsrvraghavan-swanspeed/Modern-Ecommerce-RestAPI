@@ -48,20 +48,18 @@ public class FileUtil {
      * @param filePath 
      */
     public static void deleteFile(String filePath) throws IOException{
-        if(!Files.deleteIfExists(filePath)){
-            EventLogManager.getInstance().info("deleteFile Failed : ");
+        if(!Files.deleteIfExists(filePath)){            
+            EventLogManager.getInstance().info("deleteFile Failed");
         }
     }
 
     public static void deleteDirectory2(String path) throws IOException{
         File dir = new File(path);
         if (dir.exists()) {
-            //
             File[] files = dir.listFiles();
             for (int i = 0; i < files.length; i++) {
                 deleteFile(files[i].getPath());
             }
-            // 
             if(!dir.delete()){
                 EventLogManager.getInstance().info("deleteDirectory2 Failed : ");
             }
