@@ -24,6 +24,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  */
 public class FileUtil {
@@ -48,7 +51,8 @@ public class FileUtil {
      * @param filePath 
      */
     public static void deleteFile(String filePath) throws IOException{
-        if(!Files.deleteIfExists(filePath)){            
+        Path path = Paths.get("c:\\data\\myfile.txt");
+        if(!Files.deleteIfExists(path)){            
             EventLogManager.getInstance().info("deleteFile Failed");
         }
     }
