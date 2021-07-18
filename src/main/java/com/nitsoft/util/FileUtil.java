@@ -51,7 +51,7 @@ public class FileUtil {
      * @param filePath 
      */
     public static void deleteFile(String filePath) throws IOException{
-        Path path = Paths.get("c:\\data\\myfile.txt");
+        Path path = Paths.get(filePath);
         if(!Files.deleteIfExists(path)){            
             EventLogManager.getInstance().info("deleteFile Failed");
         }
