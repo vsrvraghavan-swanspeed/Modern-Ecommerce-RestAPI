@@ -91,7 +91,7 @@ public class FileUtil {
             }
     }
 
-    public static void copyFolder(String in, String out) throws Exception {
+    public static void copyFolder(String in, String out) throws IOException {
 
         File newdir = new File(out);
         if (!newdir.exists()) {
@@ -289,6 +289,6 @@ public class FileUtil {
             }
         } catch (IOException e) {
             EventLogManager.getInstance().error(e.getMessage());
-        } 
+        }
     }
 }
