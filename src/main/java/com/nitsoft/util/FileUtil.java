@@ -70,9 +70,10 @@ public class FileUtil {
         }
     }
 
-    public static void deleteDirectory(String path) throws IOException{
-        if (path != null) {
-            File dir = new File(path);
+    public static void deleteDirectory(String filePath) throws IOException{
+        if (filePath != null) {
+            Path path = Paths.get(filePath);
+            File dir = new File(filePath);
             if (dir.exists()) {
                 // 
                 File[] files = dir.listFiles();
@@ -83,7 +84,7 @@ public class FileUtil {
                         deleteDirectory(files[i].getPath());
                     }
                 }
-                if(!dir.delete()){
+                if(!Files.delete(path)){
                     EventLogManager.getInstance().info("deleteDirectory Failed : ");
                 }
             }
