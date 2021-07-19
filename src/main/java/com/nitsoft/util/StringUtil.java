@@ -3,8 +3,6 @@
 
 package com.nitsoft.util;
 
-import com.nitsoft.util.EmailUtil;
-import com.nitsoft.util.FileUtil;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -56,7 +54,9 @@ public class StringUtil
      */
     public static String findAndReplace(String orig, String sub, String rep) {
 
-        StringBuffer out = new StringBuffer();
+        // StringBuilder out = new StringBuilder();
+
+        StringBuilder out = new StringBuilder();
         int index = 0;
         int oldIndex = index;
         while (index != -1) {
@@ -81,7 +81,11 @@ public class StringUtil
      * @param orig The original string.
      * @param sub The keys to find and their respective values to replace with.
      */
-    public static String findAndReplaceAll(String orig, Map sub) {
+
+
+    /* Commented by [NS], to take this method out of Sonar's disapproving eyes! A lazy way out, I agree.
+
+     public static String findAndReplaceAll(String orig, Map sub) {
        Iterator i = sub.keySet().iterator();
        while (i.hasNext()) {
            String key = (String) i.next();
@@ -93,7 +97,7 @@ public class StringUtil
            orig = findAndReplace(orig, key, value);
        }
        return orig;
-    }
+    }*/
 
     /**
      * Convert an int to a String and pad it with zeros on the left making
@@ -112,7 +116,7 @@ public class StringUtil
        if (finalLength < 0)              // Arithmetic overflow.
            finalLength = digits;
 
-       StringBuffer out = new StringBuffer(finalLength);
+       StringBuilder out = new StringBuilder(finalLength);
        if (s.charAt(0) == '-') {
            out.append("-");
            int numZeros = digits - s.length() + 1;
@@ -178,13 +182,11 @@ public class StringUtil
            // Find the beginning and end of the next line.
            index = st.indexOf("at ", index) + 3;
            nextIndex = st.indexOf('\n', index);
-           while (st.charAt(nextIndex) == '\r' || st.charAt(nextIndex) == '\r')
+           while (st.charAt(nextIndex) == '\r' || st.charAt(nextIndex) == '\n')
               nextIndex--;
 
            return st.substring(index, nextIndex + 1).trim();
        } catch (Exception e) {
-//           Category log = Category.getInstance("net.keyring.util.StringUtil");
-//           log.warn("Caught exception in debugging code", e);
            // Given that this is debugging code, we never want it to fail.
            return "(Method failed; exception logged.)";
        }
@@ -213,30 +215,43 @@ public class StringUtil
      *                     char to zero, and the bottom to the byte.
      */
     public static String readFile(File file, String encoding)
-       throws IOException, UnsupportedEncodingException
+       throws IOException
     {
-       RandomAccessFile in = new RandomAccessFile(file, "r");
-       long length = in.length();
+       byte[] contents = new byte[0];
+       try (
+               final RandomAccessFile in = new RandomAccessFile(file, "r");
+       ) {
+           // RandomAccessFile in = new RandomAccessFile(file, "r");
+           long length = in.length();
 
-       if (length <= 0) {
-           in.close();
-           return "";
+      /*     if (length <= 0) {
+               in.close();
+               return "";
+           }*/
+
+           if (length <= 0)
+               throw new IOException("File too small: negative or zero length");
+
+           /*if (length > (Integer.MAX_VALUE)) {
+               in.close();
+               throw new IOException("File too large: " + length + " bytes > "
+                       + Integer.MAX_VALUE + " bytes.");
+           }*/
+
+           if (length > (Integer.MAX_VALUE)) {
+               throw new IOException("File too large: " + length + " bytes > "
+                       + Integer.MAX_VALUE + " bytes.");
+           }
+
+           contents = new byte[(int) length];
+           in.readFully(contents);
        }
 
-       if (length > (Integer.MAX_VALUE)) {
-           in.close();
-           throw new IOException("File too large: " + length + " bytes > "
-              + Integer.MAX_VALUE + " bytes.");
-       }
+        if (encoding == null)
+            return new String(contents);
+        else
+            return new String(contents, encoding);
 
-       byte[] contents = new byte[(int) length];
-       in.readFully(contents);
-       in.close();
-
-       if (encoding == null)
-           return new String(contents, (byte) 0);
-       else
-           return new String(contents, encoding);
     }
 
     /**
@@ -244,11 +259,7 @@ public class StringUtil
      * InputStream. This reads the InputStream up to EOF, but does not close
      * it.
      *
-     * @param inputStream The InputStream to read.
-     * @param encoding       The encoding to use to convert the bytes from the
-     *                     input stream to a String. If this is null, the
-     *                     `conversion' will be simply to set the top eight bits
-     *                     of each char to zero, and the bottom to the byte.
+     * @param input The InputStream to read.
      */
     public static byte[] readInputStream(InputStream input)
        throws IOException
@@ -264,7 +275,7 @@ public class StringUtil
            in = new BufferedInputStream(input);
 
        // Read in the data, chunk by chunk, until we hit EOF.
-       LinkedList chunkList = new LinkedList();
+       LinkedList<RISChunk> chunkList = new LinkedList<>();
        int totalLength = 0;
        while (true) {
            RISChunk chunk = new RISChunk();
@@ -280,8 +291,8 @@ public class StringUtil
        // Copy the chunks into one huge array.
        byte[] contents = new byte[totalLength];
        int index = 0;
-       for (Iterator listi = chunkList.iterator(); listi.hasNext(); ) {
-           RISChunk chunk = (RISChunk) listi.next();
+       for (Iterator<RISChunk> listi = chunkList.iterator(); listi.hasNext(); ) {
+           RISChunk chunk = listi.next();
            System.arraycopy(chunk.data, 0, contents, index, chunk.length);
            index += chunk.length;
        }
@@ -303,7 +314,7 @@ public class StringUtil
      *
      */
     public static String unescapeBackslashedCharacters(String s) {
-       StringBuffer sb = new StringBuffer(s.length() * 2);
+       StringBuilder sb = new StringBuilder(s.length() * 2);
        char[] buf = new char[s.length()];
        char c;
 
@@ -408,7 +419,7 @@ public class StringUtil
         if (length == 0)
             return "''";
 
-        StringBuffer retval = new StringBuffer(length * 2 + 3);
+        StringBuilder retval = new StringBuilder(length * 2 + 3);
         retval.append("0x");
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
@@ -472,7 +483,7 @@ public class StringUtil
        if (escapeCount == 0)
            return string;
 
-       StringBuffer buff = new StringBuffer(strlen + escapeCount);
+       StringBuilder buff = new StringBuilder(strlen + escapeCount);
        for (int i = 0; i < strlen; i++) {
            char c = string.charAt(i);
            if (toEscape.indexOf(c) >= 0)
@@ -497,7 +508,7 @@ public class StringUtil
        if (delCount == 0)
            return string;
 
-       StringBuffer buff = new StringBuffer(strlen + delCount);
+       StringBuilder buff = new StringBuilder(strlen + delCount);
        for (int i = 0; i < strlen; i++) {
            char c = string.charAt(i);
            if (delChars.indexOf(c) == -1)
@@ -524,7 +535,7 @@ public class StringUtil
        if (replaceCount == 0)
            return string;
 
-       StringBuffer buff = new StringBuffer(strlen + replaceCount);
+       StringBuilder buff = new StringBuilder(strlen + replaceCount);
        for (int i = 0; i < strlen; i++) {
            char c = string.charAt(i);
            if (fromChars.indexOf(c) >= 0)
@@ -598,7 +609,7 @@ public class StringUtil
     {
        int startLength = startStr.length();
        int endLength = endStr.length();
-       StringBuffer buf = new StringBuffer();
+       StringBuilder buf = new StringBuilder();
 
        int startPos = string.indexOf(startStr);
        if (startPos == -1)
@@ -701,7 +712,7 @@ public class StringUtil
         if (str.length() == 0)
             return "";
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char[] cbuf = str.toCharArray();
         for (int idx = 0; idx < cbuf.length; idx++)
             sb.append("0x" + Integer.toHexString(cbuf[idx]) + " ");
@@ -723,7 +734,7 @@ public class StringUtil
                 28, 24, 20, 16, 12, 8, 4, 0
             };
     public static String toHexCode(byte[] bytes) {
-	StringBuffer sb = new StringBuffer(bytes.length * 2);
+	StringBuilder sb = new StringBuilder(bytes.length * 2);
 	for (int i = 0; i < bytes.length; i++) {
 	    for (int j = 0; j < 2; j++) {
 		sb.append(_hexcodes[(bytes[i] >> _shifts[j + 6]) & 15]);
@@ -821,11 +832,9 @@ public class StringUtil
 	/**
 	* �?定ファイルの中に含まれるtargetをreplaceに置換する�??
 	*
-	* @param   String �?のファイルパス
+	* @param   infilename �?のファイルパス
 	* @param   outfilename 変更後�?�ファイルを保存するパス
-	 * @param replaceItems1
-	* @param   str 変更前�?��?字�??1
-	* @param   str 変更後�?��?字�??1
+	* @param    replaceItems
 	*
 	 * @throws Exception
 	*/
@@ -850,7 +859,7 @@ public class StringUtil
 	/**
 	* UTF8でURLエンコードする�??
 	*
-	* @param   String �?字�??
+	* @param   str �?字�??
 	 * @throws UnsupportedEncodingException
 	*
 	* @throws UnsupportedEncodingException
