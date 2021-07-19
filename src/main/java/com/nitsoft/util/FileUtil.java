@@ -264,15 +264,15 @@ public class FileUtil {
                             out.write(buffer, 0, bytesRead);
                         }
                     } catch (Exception e) {
-                        EventLogManager.getInstance().info("doDownload file error" + e.getMessage());
+                        EventLogManager.getInstance().info("stream read write error" + e.getMessage());
                     }
                 }                                                
             }catch(Exception ex){
-                EventLogManager.getInstance().info("doDownload file error" + ex.getMessage());
+                EventLogManager.getInstance().info("FileInputStream error" + ex.getMessage());
             }
         // Do Download                    
         } catch (Exception ex) {
-            EventLogManager.getInstance().info("doDownload file error" + ex.getMessage());
+            EventLogManager.getInstance().info("file io error" + ex.getMessage());
         }
     }
     
