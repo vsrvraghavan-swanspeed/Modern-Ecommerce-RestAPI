@@ -24,6 +24,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  */
 public class FileUtil {
@@ -48,29 +51,29 @@ public class FileUtil {
      * @param filePath 
      */
     public static void deleteFile(String filePath) throws IOException{
-        if(!Files.deleteIfExists(filePath)){
-            EventLogManager.getInstance().info("deleteFile Failed : ");
+        Path path = Paths.get(filePath);
+        if(!Files.deleteIfExists(path)){            
+            EventLogManager.getInstance().info("deleteFile Failed");
         }
     }
 
     public static void deleteDirectory2(String path) throws IOException{
         File dir = new File(path);
         if (dir.exists()) {
-            //
             File[] files = dir.listFiles();
             for (int i = 0; i < files.length; i++) {
                 deleteFile(files[i].getPath());
             }
-            // 
             if(!dir.delete()){
                 EventLogManager.getInstance().info("deleteDirectory2 Failed : ");
             }
         }
     }
 
-    public static void deleteDirectory(String path) throws IOException{
-        if (path != null) {
-            File dir = new File(path);
+    public static void deleteDirectory(String filePath) throws IOException{
+        if (filePath != null) {
+            Path path = Paths.get(filePath);
+            File dir = new File(filePath);
             if (dir.exists()) {
                 // 
                 File[] files = dir.listFiles();
@@ -81,7 +84,7 @@ public class FileUtil {
                         deleteDirectory(files[i].getPath());
                     }
                 }
-                if(!dir.delete()){
+                if(!Files.deleteIfExists(path)){
                     EventLogManager.getInstance().info("deleteDirectory Failed : ");
                 }
             }
@@ -262,15 +265,15 @@ public class FileUtil {
                             out.write(buffer, 0, bytesRead);
                         }
                     } catch (Exception e) {
-                        EventLogManager.getInstance().info("doDownload file error" + e.getMessage());
+                        EventLogManager.getInstance().info("stream read write error" + e.getMessage());
                     }
                 }                                                
             }catch(Exception ex){
-                EventLogManager.getInstance().info("doDownload file error" + ex.getMessage());
+                EventLogManager.getInstance().info("FileInputStream error" + ex.getMessage());
             }
         // Do Download                    
         } catch (Exception ex) {
-            EventLogManager.getInstance().info("doDownload file error" + ex.getMessage());
+            EventLogManager.getInstance().info("file io error" + ex.getMessage());
         }
     }
     
