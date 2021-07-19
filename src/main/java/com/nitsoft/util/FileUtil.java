@@ -84,7 +84,7 @@ public class FileUtil {
                         deleteDirectory(files[i].getPath());
                     }
                 }
-                if(!Files.delete(path)){
+                if(!Files.deleteIfExists(path)){
                     EventLogManager.getInstance().info("deleteDirectory Failed : ");
                 }
             }
