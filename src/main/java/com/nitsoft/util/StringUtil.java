@@ -75,31 +75,6 @@ public class StringUtil
     }
 
     /**
-     * For a given string orig, find and replace every instance of key strings
-     * with their respective values.
-     *
-     * @param orig The original string.
-     * @param sub The keys to find and their respective values to replace with.
-     */
-
-
-    /* Commented by [NS], to take this method out of Sonar's disapproving eyes! A lazy way out, I agree.
-
-     public static String findAndReplaceAll(String orig, Map sub) {
-       Iterator i = sub.keySet().iterator();
-       while (i.hasNext()) {
-           String key = (String) i.next();
-           String value = (String) sub.get(key);
-           if (value == null) {
-              
-              continue;
-           }
-           orig = findAndReplace(orig, key, value);
-       }
-       return orig;
-    }*/
-
-    /**
      * Convert an int to a String and pad it with zeros on the left making
      * it <code>digits</code> digits wide. If the int is already this wide
      * or wider, it will be unchanged. Any minus sign at the front will be
@@ -221,22 +196,9 @@ public class StringUtil
        try (
                final RandomAccessFile in = new RandomAccessFile(file, "r");
        ) {
-           // RandomAccessFile in = new RandomAccessFile(file, "r");
            long length = in.length();
-
-      /*     if (length <= 0) {
-               in.close();
-               return "";
-           }*/
-
            if (length <= 0)
                throw new IOException("File too small: negative or zero length");
-
-           /*if (length > (Integer.MAX_VALUE)) {
-               in.close();
-               throw new IOException("File too large: " + length + " bytes > "
-                       + Integer.MAX_VALUE + " bytes.");
-           }*/
 
            if (length > (Integer.MAX_VALUE)) {
                throw new IOException("File too large: " + length + " bytes > "
