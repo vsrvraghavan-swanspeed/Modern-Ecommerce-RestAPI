@@ -2,17 +2,9 @@
 package com.nitsoft.util;
 
 import com.nitsoft.ecommerce.tracelogged.EventLogManager;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
+
+import java.io.*;
 import java.nio.file.Files;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,12 +83,11 @@ public class FileUtil {
         }
     }
 
-    public static void copyFile(String in, String out) throws Exception {
+    public static void copyFile(String in, String out) throws IOException {
 
-            try(FileChannel ic = new FileInputStream(in).getChannel(); FileChannel oc = new FileOutputStream(out).getChannel()){
+            try(FileChannel ic = new FileInputStream(in).getChannel();
+                FileChannel oc = new FileOutputStream(out).getChannel()){
                 oc.transferFrom(ic, 0, ic.size());              
-            }catch(Exception ex){
-                EventLogManager.getInstance().info("copyFile IO Error : " + ex.getMessage());
             }
     }
 
@@ -118,9 +109,9 @@ public class FileUtil {
         }
     }
 
-    public static String[] getLines(String filePath) throws Exception {
+    public static String[] getLines(String filePath) throws IOException {
         BufferedReader input = new BufferedReader(new FileReader(filePath));
-        ArrayList list = new ArrayList(5000);
+        ArrayList<String> list = new ArrayList<>(5000);
         String line = null;
         while ((line = input.readLine()) != null) {
             list.add(line);
@@ -174,10 +165,10 @@ public class FileUtil {
         }
     }
 
-    protected Vector pathNames() {
+    protected Vector<String> pathNames() {
         String[] list = dir.list();
         File[] files = new File[list.length];
-        Vector vec = new Vector();
+        Vector<String> vec = new Vector();
         for (int i = 0; i < list.length; i++) {
 
             String pathName = parentName
@@ -191,7 +182,7 @@ public class FileUtil {
         return vec;
     }
 
-    public static void addTargetFile(ZipOutputStream zos, File file, String fileName) throws Exception {
+    public static void addTargetFile(ZipOutputStream zos, File file, String fileName) throws IOException {
         int EOF = -1;
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 
@@ -222,8 +213,8 @@ public class FileUtil {
     } 
    
     public static String getFileSizeString( int fileSize) {        
-        int Mb= fileSize/1024/1024;
-        if(Mb>0) 
+        int mb= fileSize/1024/1024;
+        if(mb>0)
           return String.valueOf((fileSize/1024/1024))+"MB";
         else
           return String.valueOf((fileSize/1024))+"KB";
@@ -232,16 +223,15 @@ public class FileUtil {
     /**
      *
      * @param response
-     * @param filePath
-     * @param fileName
-     * @param fileType
+     * @param realPath
+     * @param createDate
      * @throws IOException
      * @throws ServletException
      */
-    public static void downloadTeamRecieptFromServer(HttpServletResponse response, String RealPath, Date createDate) {
-        EventLogManager.getInstance().info("downloadFromLocalServer path=" + RealPath);
+    public static void downloadTeamRecieptFromServer(HttpServletResponse response, String realPath, Date createDate) {
+        EventLogManager.getInstance().info("downloadFromLocalServer path=" + realPath);
         try {
-            java.io.File initialFile = new java.io.File(RealPath);
+            java.io.File initialFile = new java.io.File(realPath);
             
             try(InputStream inputStream = new FileInputStream(initialFile)){                
                 if (inputStream != null) {
@@ -249,12 +239,11 @@ public class FileUtil {
                     response.setContentLength(contentLength);
                     response.addHeader("Content-Length", Long.toString(contentLength));
                     //read from the file; write to the ServletOutputStream
-                    String ext = FilenameUtils.getExtension(RealPath);
+                    String ext = FilenameUtils.getExtension(realPath);
 
                     response.setContentType(MimeTypeUtils.getMineType(ext)); // Fixing bug: Lack extention on IE9
                     response.setHeader("Content-Type", MimeTypeUtils.getMineType(ext));
 
-    //                String baseName = (ext.equals(fileType)) ? FilenameUtils.getBaseName(fileName) : fileName;
 
                     response.setHeader("Content-Disposition", "attachment; filename=\"receipt_" + createDate.toString() + "." + ext + "\""); // Fix bug: Lack file name on Firefox
                     ServletOutputStream out = response.getOutputStream();
@@ -284,33 +273,22 @@ public class FileUtil {
      * @param destFile
      */
     public static void appendFile(InputStream in, File destFile) {
-        OutputStream out = null;
-        try {
-            if (destFile.exists()) {
-                out = new BufferedOutputStream(new FileOutputStream(destFile, true), BUFFER_SIZE);
-            } else {
-                out = new BufferedOutputStream(new FileOutputStream(destFile), BUFFER_SIZE);
-            }
-            in = new BufferedInputStream(in, BUFFER_SIZE);
+        try (
+                OutputStream out = (destFile.exists()
+                                    ?new BufferedOutputStream(new FileOutputStream(destFile, true), BUFFER_SIZE)
+                                    : new BufferedOutputStream(new FileOutputStream(destFile), BUFFER_SIZE)
+                );
+                InputStream inputStream = new BufferedInputStream(in, BUFFER_SIZE);
+        ) {
+
 
             int len = 0;
             byte[] buffer = new byte[BUFFER_SIZE];
-            while ((len = in.read(buffer)) > 0) {
+            while ((len = inputStream.read(buffer)) > 0) {
                 out.write(buffer, 0, len);
             }
         } catch (IOException e) {
             EventLogManager.getInstance().error(e.getMessage());
-        } finally {
-            try {
-                if (null != in) {
-                    in.close();
-                }
-                if (null != out) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                EventLogManager.getInstance().error(e.getMessage());
-            }
-        }
+        } 
     }
 }
