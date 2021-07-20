@@ -23,6 +23,7 @@ public class XMLResponseParser{
       public static String parseXML(InputStream input, String tagname) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            dbFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = (Document) dBuilder.parse(input);
             doc.getDocumentElement().normalize();
