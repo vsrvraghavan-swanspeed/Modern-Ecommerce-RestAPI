@@ -45,6 +45,7 @@ public class XMLResponseParser{
       public static List<Map<String, Object>> parseGoogleContactXML(InputStream input, String tagname) {
         try { 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             org.w3c.dom.Document doc = (org.w3c.dom.Document) dBuilder.parse(input);
             doc.getDocumentElement().normalize();
