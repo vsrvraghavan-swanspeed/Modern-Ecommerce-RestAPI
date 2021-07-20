@@ -2,6 +2,7 @@ package com.nitsoft.util.test;
 
 
 import com.nitsoft.util.StringUtil;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,16 +14,16 @@ public class StringUtilTest {
     public void zeroPadIntWith1DigitTest() {
         String paddedString = StringUtil.zeroPadInt(5,1);
 
-        assert (paddedString.length() == 1);
-        assert (paddedString.startsWith("5"));
+        Assert.assertEquals (paddedString, 1);
+        Assert.assertEquals(paddedString,("5"));
     }
 
     @Test
     public void zeroPadIntWithFewerDigitsTest() {
         String paddedString = StringUtil.zeroPadInt(500,1);
 
-        assert (paddedString.length() == 3);
-        assert (paddedString.equals("500"));
+        Assert.assertEquals (paddedString.length(),3);
+        Assert.assertEquals (paddedString, ("500"));
     }
 
 
@@ -30,43 +31,43 @@ public class StringUtilTest {
     public void zeroPadIntWithMoreDigitsTest() {
         String paddedString = StringUtil.zeroPadInt(500,5);
 
-        assert (paddedString.length() == 5);
-        assert (paddedString.equals("00500"));
+        Assert.assertEquals (paddedString.length(), 5);
+        Assert.assertEquals (paddedString,("00500"));
     }
 
     @Test
     public void findAndReplaceLastCharTest() {
         String modifiedString = StringUtil.findAndReplace("ABCDEFG","G","H");
 
-        assert (modifiedString.equals("ABCDEFH"));
+        Assert.assertEquals (modifiedString,("ABCDEFH"));
     }
 
     @Test
     public void findAndReplaceEntireStringWithSameTest() {
         String modifiedString = StringUtil.findAndReplace("ABCDEFG","ABCDEFG","ABCDEFG");
 
-        assert (modifiedString.equals("ABCDEFG"));
+        Assert.assertEquals (modifiedString,("ABCDEFG"));
     }
 
     @Test
     public void findAndReplaceEntireStringWithEmptyTest() {
         String modifiedString = StringUtil.findAndReplace("ABCDEFG","ABCDEFG","");
 
-        assert (modifiedString.equals(""));
+        Assert.assertEquals (modifiedString,(""));
     }
 
     @Test
     public void deleteCharactersInStringWithNothingTest() {
         String modifiedString = StringUtil.deleteCharacters("ABCDEFG","");
 
-        assert (modifiedString.equals("ABCDEFG"));
+        Assert.assertEquals (modifiedString,("ABCDEFG"));
     }
 
     @Test
     public void deleteCharactersInStringWithEverythingTest() {
         String modifiedString = StringUtil.deleteCharacters("ABCDEFG","ABCDEFG");
 
-        assert (modifiedString.equals(""));
+        Assert.assertEquals (modifiedString,(""));
     }
 
 
@@ -74,6 +75,6 @@ public class StringUtilTest {
     public void deleteCharactersInStringWithRepeatedCharctersTest() {
         String modifiedString = StringUtil.deleteCharacters("ABCDEFG","AABB");
 
-        assert (modifiedString.equals("CDEFG"));
+        Assert.assertEquals (modifiedString,("CDEFG"));
     }
 }
