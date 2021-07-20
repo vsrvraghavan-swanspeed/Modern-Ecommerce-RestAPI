@@ -183,7 +183,7 @@ public class FileUtil {
     }
 
     public static void addTargetFile(ZipOutputStream zos, File file, String fileName) throws IOException {
-        int EOF = -1;
+        int eof = -1;
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 
         ZipEntry target = new ZipEntry(fileName);
@@ -192,7 +192,7 @@ public class FileUtil {
 
         byte buf[] = new byte[1024];
         int count;
-        while ((count = bis.read(buf, 0, 1024)) != EOF) {
+        while ((count = bis.read(buf, 0, 1024)) != eof) {
             zos.write(buf, 0, count);
         }
         bis.close();
