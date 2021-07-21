@@ -77,4 +77,32 @@ public class StringUtilTest {
 
         Assert.assertEquals ("CDEFG",modifiedString);
     }
+
+    @Test
+    public void restrictLengthOfStringWithSameLengthTest() {
+        String shrunkString = StringUtil.restrictLength("ABCDEFG", 7);
+
+        Assert.assertEquals("ABCDEFG", shrunkString);
+    }
+
+    @Test
+    public void restrictLengthOfStringWithLesserLengthTest() {
+        String shrunkString = StringUtil.restrictLength("ABCDEFG", 5);
+
+        Assert.assertEquals("AB...", shrunkString);
+    }
+
+    @Test
+    public void restrictLengthOfStringWithBiggerLengthTest() {
+        String shrunkString = StringUtil.restrictLength("ABCDEFG", 10);
+
+        Assert.assertEquals("ABCDEFG", shrunkString);
+    }
+
+    @Test(expected = java.lang.StringIndexOutOfBoundsException.class)
+    public void restrictLengthOfStringWithLength3Test() {
+        String shrunkString = StringUtil.restrictLength("ABC", 2);
+
+        Assert.assertEquals("ABC...", shrunkString);
+    }
 }
