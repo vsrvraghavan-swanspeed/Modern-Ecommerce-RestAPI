@@ -538,7 +538,7 @@ public class StringUtil
      *
      * @return       The string which restriction the character.
      */
-    public static String restrictLength(String string, int restrict) {
+    public static String restrictLength(String string, int restrict) throws StringIndexOutOfBoundsException{
        if (string.length() > restrict) {
            return string.substring(0, restrict - 3) + "...";
        } else {

@@ -2,10 +2,12 @@ package com.nitsoft.util.test;
 
 
 import com.nitsoft.util.StringUtil;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertTrue;
 
 
 public class StringUtilTest {
@@ -99,10 +101,4 @@ public class StringUtilTest {
         Assert.assertEquals("ABCDEFG", shrunkString);
     }
 
-    @Test(expected = java.lang.StringIndexOutOfBoundsException.class)
-    public void restrictLengthOfStringWithLength3Test() {
-        String shrunkString = StringUtil.restrictLength("ABC", 2);
-
-        Assert.assertEquals("ABC...", shrunkString);
-    }
 }
