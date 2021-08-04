@@ -17,6 +17,7 @@
 
     <properties>
         <start-class>com.nitsoft.ecommerce.Application</start-class>
+<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -261,6 +262,11 @@
     <version>2.3.1</version>
 </dependency>	
 
+<dependency>
+    <groupId>org.jacoco</groupId> 
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.6</version>
+</dependency>
 
 
     </dependencies>
@@ -299,6 +305,28 @@
                     <skipTests>false</skipTests>
                 </configuration> 
             </plugin>
+
+
+<plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.6</version>
+    <executions>
+      <execution>
+        <id>prepare-agent</id>
+        <goals>
+         <goal>prepare-agent</goal>
+        </goals>
+      </execution>
+      <execution>
+        <id>report</id>
+        <goals>
+         <goal>report</goal>
+        </goals>
+      </execution>
+    </executions>
+</plugin>
+
             
         </plugins>
     </build>
