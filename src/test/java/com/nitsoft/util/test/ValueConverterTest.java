@@ -7,6 +7,8 @@ import org.junit.Test;
 
 public class ValueConverterTest {
 
+
+
     @Test
     public void conversionToDoubleTestWithOKParsing() {
         Double computedDouble = ValueConverter.convertStringToDouble("19.21",0.01);

@@ -27,7 +27,7 @@ public class ValueConverter {
         } else if (strVal.equalsIgnoreCase("false") || strVal.equals("0")) {
             return false;
         }
-      
+
         return defaultVal;
     }
 
