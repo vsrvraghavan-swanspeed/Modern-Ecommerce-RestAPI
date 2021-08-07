@@ -3,6 +3,7 @@ package com.nitsoft.ecommerce.service.orders;
 import com.nitsoft.ecommerce.database.model.OrderPayment;
 //import com.nitsoft.ecommerce.repository.OrderPaymentRepository;
 import com.nitsoft.ecommerce.service.AbstractBaseService;
+import com.nitsoft.ecommerce.service.orders.OrderPaymentService;
 import org.springframework.stereotype.Component;
 
 /**

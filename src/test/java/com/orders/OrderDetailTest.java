@@ -1,11 +1,8 @@
-package nitsoft.ecommerce.service.orders;
+package com.orders;
 
-import com.nitsoft.ecommerce.database.model.OrderAddress;
 import com.nitsoft.ecommerce.database.model.OrderDetail;
 import com.nitsoft.ecommerce.service.AbstractBaseService;
-import com.nitsoft.ecommerce.service.orders.OrderAddressService;
 import com.nitsoft.ecommerce.service.orders.OrderDetailService;
-import org.hibernate.criterion.Order;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

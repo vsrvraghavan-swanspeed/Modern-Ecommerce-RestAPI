@@ -1,11 +1,12 @@
-
 package com.nitsoft.ecommerce.service.orders;
+
 
 import com.nitsoft.ecommerce.api.request.model.OrdersRequestModel;
 import com.nitsoft.ecommerce.database.model.Orders;
 import com.nitsoft.ecommerce.repository.OrdersRepository;
 import com.nitsoft.ecommerce.repository.specification.OrdersSpecification;
 import com.nitsoft.ecommerce.service.AbstractBaseService;
+import com.nitsoft.ecommerce.service.orders.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +20,15 @@ import org.springframework.stereotype.Component;
 public class OrderServiceImpl extends AbstractBaseService implements OrderService {
 
     @Autowired
-    OrdersRepository ordersRepository;
-    
+     OrdersRepository ordersRepository;
+
+    public OrderServiceImpl() {
+    }
+
+    public OrderServiceImpl(OrdersRepository ordersRepository) {
+        this.ordersRepository = ordersRepository;
+    }
+
     /*
     ** Get list paging ,search sort for paging order
     */
